@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en-CA">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Watt Check – Smart Energy Advisor</title>
+  <meta name="description" content="Estimate your household electricity cost from your monthly use and rate, then compare a savings scenario.">
+  <meta property="og:title" content="Watt Check – Smart Energy Advisor">
+  <meta property="og:description" content="Estimate your household electricity cost, then compare a savings scenario.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b5d4b'/%3E%3Cpath d='M18 4 8 18h7l-1 10 10-14h-7z' fill='%23ffd166'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <div class="wrap site-header__inner">
+      <a class="brand" href="./" aria-label="Watt Check, start page">
+        <svg class="brand__mark" viewBox="0 0 32 32" width="32" height="32" aria-hidden="true" focusable="false">
+          <rect width="32" height="32" rx="8" fill="currentColor"/>
+          <path d="M18 4 8 18h7l-1 10 10-14h-7z" fill="#ffd166"/>
+        </svg>
+        <span class="brand__name">Watt Check</span>
+      </a>
+      <p class="site-header__tag">Smart Energy Advisor</p>
+    </div>
+  </header>
+
+  <main id="main" class="wrap">
+    <!-- Progress indicator: three interface states of one flow -->
+    <ol class="steps" aria-label="Progress">
+      <li class="steps__item is-current" data-step="usage" aria-current="step">
+        <span class="steps__num" aria-hidden="true">1</span><span class="steps__label">Your usage</span>
+      </li>
+      <li class="steps__item" data-step="estimate">
+        <span class="steps__num" aria-hidden="true">2</span><span class="steps__label">Estimate</span>
+      </li>
+      <li class="steps__item" data-step="compare">
+        <span class="steps__num" aria-hidden="true">3</span><span class="steps__label">Compare</span>
+      </li>
+    </ol>
+
+    <!-- ========== STATE 1: enter usage and rate ========== -->
+    <section id="view-usage" class="view" aria-labelledby="h-usage">
+      <h1 id="h-usage" tabindex="-1">Estimate your electricity cost</h1>
+      <p class="lead">Enter how much electricity you use in a month and what you pay per kilowatt-hour (kWh). Both numbers are on your electricity bill.</p>
+
+      <div class="layout">
+        <form id="usage-form" class="card" novalidate>
+          <div id="usage-errors" class="error-summary" role="alert" tabindex="-1" hidden></div>
+
+          <div class="field">
+            <label for="kwh">Monthly electricity use</label>
+            <div class="input-unit">
+              <input id="kwh" name="kwh" type="text" inputmode="decimal" autocomplete="off" aria-describedby="kwh-hint kwh-error">
+              <span class="input-unit__unit" aria-hidden="true">kWh</span>
+            </div>
+            <p id="kwh-hint" class="hint">In kilowatt-hours, for one month. Example: 750.</p>
+            <p id="kwh-error" class="field-error" hidden></p>
+          </div>
+
+          <div class="field">
+            <label for="rate">Electricity rate</label>
+            <div class="input-unit">
+              <input id="rate" name="rate" type="text" inputmode="decimal" autocomplete="off" aria-describedby="rate-hint rate-error">
+              <span class="input-unit__unit" aria-hidden="true">¢ / kWh</span>
+            </div>
+            <p id="rate-hint" class="hint">In cents per kWh. Example: 12.0 means 12 cents.</p>
+            <p id="rate-error" class="field-error" hidden></p>
+          </div>
+
+          <div class="actions">
+            <button type="submit" class="btn btn--primary">Estimate cost</button>
+            <button type="button" class="btn btn--secondary" id="use-sample">Use example household</button>
+          </div>
+        </form>
+
+        <aside class="card card--note" aria-labelledby="h-how">
+          <h2 id="h-how" class="h3">How this works</h2>
+          <ol class="plain-list">
+            <li>You enter your monthly use and rate.</li>
+            <li>We multiply them to estimate your monthly, yearly and daily cost.</li>
+            <li>You test a savings idea, such as using 10% less.</li>
+          </ol>
+          <p class="hint">Nothing you type leaves your device.</p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ========== STATE 2: estimate result ========== -->
+    <section id="view-estimate" class="view" aria-labelledby="h-estimate" hidden>
+      <h2 id="h-estimate" class="h1" tabindex="-1">Your estimated electricity cost</h2>
+      <p class="lead" id="estimate-formula"></p>
+
+      <div class="stats">
+        <div class="stat stat--main">
+          <p class="stat__label">Per month</p>
+          <p class="stat__value" id="est-month"></p>
+        </div>
+        <div class="stat">
+          <p class="stat__label">Per year</p>
+          <p class="stat__value" id="est-year"></p>
+        </div>
+        <div class="stat">
+          <p class="stat__label">Per day (average)</p>
+          <p class="stat__value" id="est-day"></p>
+        </div>
+      </div>
+
+      <p class="note"><strong>This is an estimate.</strong> It leaves out delivery charges, taxes and fixed monthly fees that appear on a real bill.</p>
+
+      <div class="actions">
+        <button type="button" class="btn btn--primary" id="go-compare">Compare a savings scenario</button>
+        <button type="button" class="btn btn--secondary" id="edit-usage">Edit my usage</button>
+      </div>
+    </section>
+
+    <!-- ========== STATE 3: compare a savings scenario ========== -->
+    <section id="view-compare" class="view" aria-labelledby="h-compare" hidden>
+      <h2 id="h-compare" class="h1" tabindex="-1">Compare a savings scenario</h2>
+      <p class="lead">Try using less electricity, or a different rate, and see what changes.</p>
+
+      <div class="layout layout--compare">
+        <form id="scenario-form" class="card" novalidate>
+          <div id="scenario-errors" class="error-summary" role="alert" tabindex="-1" hidden></div>
+
+          <div class="field">
+            <label for="reduction">Use less electricity by</label>
+            <div class="input-unit">
+              <input id="reduction" name="reduction" type="text" inputmode="decimal" autocomplete="off" value="10" aria-describedby="reduction-hint reduction-error">
+              <span class="input-unit__unit" aria-hidden="true">%</span>
+            </div>
+            <p id="reduction-hint" class="hint">0 means no change. Quick picks below.</p>
+            <p id="reduction-error" class="field-error" hidden></p>
+            <div class="chips" role="group" aria-label="Quick picks for reduction">
+              <button type="button" class="chip" data-reduction="10">10%</button>
+              <button type="button" class="chip" data-reduction="20">20%</button>
+              <button type="button" class="chip" data-reduction="30">30%</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="scenario-rate">Scenario rate <span class="optional">(optional)</span></label>
+            <div class="input-unit">
+              <input id="scenario-rate" name="scenarioRate" type="text" inputmode="decimal" autocomplete="off" aria-describedby="scenario-rate-hint scenario-rate-error">
+              <span class="input-unit__unit" aria-hidden="true">¢ / kWh</span>
+            </div>
+            <p id="scenario-rate-hint" class="hint">Leave blank to keep your current rate.</p>
+            <p id="scenario-rate-error" class="field-error" hidden></p>
+          </div>
+
+          <div class="actions">
+            <button type="submit" class="btn btn--primary">Compare</button>
+          </div>
+        </form>
+
+        <div class="card" id="compare-result" aria-labelledby="h-result">
+          <h3 id="h-result" class="h3">Result</h3>
+          <!-- Announced politely to screen readers whenever the comparison changes -->
+          <p id="compare-summary" class="summary" role="status"></p>
+
+          <div class="bars" aria-hidden="true">
+            <div class="bar-row">
+              <span class="bar-row__label">Now</span>
+              <span class="bar-track"><span class="bar bar--now" id="bar-now"></span></span>
+              <span class="bar-row__value" id="bar-now-val"></span>
+            </div>
+            <div class="bar-row">
+              <span class="bar-row__label">Scenario</span>
+              <span class="bar-track"><span class="bar bar--scenario" id="bar-scn"></span></span>
+              <span class="bar-row__value" id="bar-scn-val"></span>
+            </div>
+          </div>
+
+          <table class="compare-table">
+            <caption class="visually-hidden">Current electricity cost compared with the scenario</caption>
+            <thead>
+              <tr><th scope="col"><span class="visually-hidden">Measure</span></th><th scope="col">Now</th><th scope="col">Scenario</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Use (kWh / month)</th><td id="t-kwh-now"></td><td id="t-kwh-scn"></td></tr>
+              <tr><th scope="row">Rate (¢ / kWh)</th><td id="t-rate-now"></td><td id="t-rate-scn"></td></tr>
+              <tr><th scope="row">Cost per month</th><td id="t-month-now"></td><td id="t-month-scn"></td></tr>
+              <tr><th scope="row">Cost per year</th><td id="t-year-now"></td><td id="t-year-scn"></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="btn btn--secondary" id="back-estimate">Back to my estimate</button>
+        <button type="button" class="btn btn--secondary" id="start-over">Start over</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>Watt Check is a student project for INFO-3130 (Conestoga College). Estimates only: not a utility bill and not financial advice.</p>
+    </div>
+  </footer>
+
+  <script src="js/calc.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
