@@ -4,7 +4,7 @@ A small, accessible web app that helps a household understand its approximate el
 Built for the INFO-3130 *The Emerging Interface* practical midterm (scenario 05: Smart Energy Advisor).
 
 - **Live site:** https://vraj747.github.io/energy-advisor/
-- **Figma (desktop + mobile):** `FIGMA_URL_PLACEHOLDER`
+- **Figma (desktop + mobile):** https://www.figma.com/design/173LeukpOBh3cQmnueeLMu/Portfolio?node-id=6211-2 (page "Midterm-Energy Advisor": tokens and components, D1 to D6 desktop, M1 to M6 mobile, user flow, accessibility notes)
 
 ## What it does
 
@@ -55,7 +55,7 @@ Skip link, one `h1` per state with focus moved to it on each step change, visibl
 - Cost = kWh × rate. There is no time-of-use pricing, utility API, real-time rates or prediction (out of scope for this brief).
 - Sanity limits (1–10,000 kWh, 0.1–100¢) exist to catch typos, not utility rules.
 - Automated checks (axe-core) and my own keyboard testing do not prove full WCAG 2.2 compliance; screen-reader testing with NVDA/VoiceOver was not done.
-- The Figma file uses Inter; the live site uses the visitor's system UI font to avoid loading a third-party font.
+- The Figma file uses Inter; the live site uses the visitor's system UI font to avoid loading a third-party font. The Figma frames are plain frames and groups (no Auto Layout or Figma variables).
 
 ## Credits
 
