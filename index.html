@@ -90,7 +90,7 @@
 
     <!-- ========== STATE 2: estimate result ========== -->
     <section id="view-estimate" class="view" aria-labelledby="h-estimate" hidden>
-      <h2 id="h-estimate" class="h1" tabindex="-1">Your estimated electricity cost</h2>
+      <h1 id="h-estimate" tabindex="-1">Your estimated electricity cost</h1>
       <p class="lead" id="estimate-formula"></p>
 
       <div class="stats">
@@ -118,7 +118,7 @@
 
     <!-- ========== STATE 3: compare a savings scenario ========== -->
     <section id="view-compare" class="view" aria-labelledby="h-compare" hidden>
-      <h2 id="h-compare" class="h1" tabindex="-1">Compare a savings scenario</h2>
+      <h1 id="h-compare" tabindex="-1">Compare a savings scenario</h1>
       <p class="lead">Try using less electricity, or a different rate, and see what changes.</p>
 
       <div class="layout layout--compare">
@@ -155,8 +155,8 @@
           </div>
         </form>
 
-        <div class="card" id="compare-result" aria-labelledby="h-result">
-          <h3 id="h-result" class="h3">Result</h3>
+        <section class="card" id="compare-result" aria-labelledby="h-result">
+          <h2 id="h-result" class="h3">Result</h2>
           <!-- Announced politely to screen readers whenever the comparison changes -->
           <p id="compare-summary" class="summary" role="status"></p>
 
@@ -185,7 +185,7 @@
               <tr><th scope="row">Cost per year</th><td id="t-year-now"></td><td id="t-year-scn"></td></tr>
             </tbody>
           </table>
-        </div>
+        </section>
       </div>
 
       <div class="actions">

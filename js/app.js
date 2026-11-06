@@ -175,19 +175,31 @@
     return check;
   }
 
-  $("scenario-form").addEventListener("submit", function (e) {
-    e.preventDefault();
+  // On phones the result card sits below the form, off-screen after a tap on Compare or a chip.
+  // Bring it into view (no animation if the user prefers reduced motion); focus stays on the control.
+  function revealResult() {
+    var card = $("compare-result");
+    if (card.getBoundingClientRect().top < window.innerHeight * 0.6) return; // side-by-side layout: already visible
+    var calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    card.scrollIntoView({ block: "start", behavior: calm ? "auto" : "smooth" });
+  }
+
+  function submitScenario() {
     clearErrors($("scenario-errors"), ["reduction", "scenarioRate"]);
     var check = runComparison();
     if (!check.valid) showErrors($("scenario-errors"), check.errors);
+    else revealResult();
+  }
+
+  $("scenario-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    submitScenario();
   });
 
   document.querySelectorAll(".chip").forEach(function (chip) {
     chip.addEventListener("click", function () {
       $("reduction").value = chip.dataset.reduction;
-      clearErrors($("scenario-errors"), ["reduction", "scenarioRate"]);
-      var check = runComparison();
-      if (!check.valid) showErrors($("scenario-errors"), check.errors);
+      submitScenario();
     });
   });
 
